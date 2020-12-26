@@ -1,8 +1,7 @@
-package pro.kuli4.repository.apireciever;
+package pro.kuli4.repository.apireceiver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pro.kuli4.repository.apireciever.services.SourceSystems;
 
 @SpringBootApplication
 public class ApiRecieverApplication {

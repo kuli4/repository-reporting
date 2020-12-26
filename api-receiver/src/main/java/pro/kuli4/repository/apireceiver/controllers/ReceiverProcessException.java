@@ -1,4 +1,4 @@
-package pro.kuli4.repository.apireciever.controllers;
+package pro.kuli4.repository.apireceiver.controllers;
 
 public class ReceiverProcessException extends RuntimeException {
     public ReceiverProcessException(String msg, Throwable cause) {

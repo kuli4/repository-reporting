@@ -1,4 +1,4 @@
-package pro.kuli4.repository.apireciever.services;
+package pro.kuli4.repository.apireceiver.services;
 
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pro.kuli4.repository.apireciever.controllers.ReceiverProcessException;
+import pro.kuli4.repository.apireceiver.controllers.ReceiverProcessException;
 import pro.kuli4.repository.common.innermessage.InnerMessage;
 import pro.kuli4.repository.common.innermessage.RepositorySystemComponents;
 import pro.kuli4.repository.common.kafka.KafkaProducerService;

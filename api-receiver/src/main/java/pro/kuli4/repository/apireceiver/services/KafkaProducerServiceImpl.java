@@ -1,4 +1,4 @@
-package pro.kuli4.repository.apireciever.services;
+package pro.kuli4.repository.apireceiver.services;
 
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
