@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package pro.kuli4.repository.common.innermessage;
+option java_multiple_files = true;
+option java_outer_classname = "InnerMessageStaffBasket";
+
+message InnerMessage {
+  string id = 1;
+  string messageChainId = 7;
+  RepositorySystemComponents from = 2;
+  RepositorySystemComponents to = 3;
+  MessageType type = 6;
+  bytes payload = 4;
+  string datetime = 5;
+}
+
+enum RepositorySystemComponents {
+  MASTER_AGREEMENT_COMPONENT = 0;
+  COUNTER_AGENT_COMPONENT = 1;
+  API_COMPONENT = 2;
+  GENERATOR_COMPONENT = 3;
+}
+
+enum MessageType {
+  MA_NEW = 0;
+  MA_NSD_RESPONSE = 1;
+}

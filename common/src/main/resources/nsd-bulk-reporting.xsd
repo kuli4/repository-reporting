@@ -1,0 +1,986 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.fpml.org/FpML-5/recordkeeping/nsd-ext"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:fpml="http://www.fpml.org/FpML-5/recordkeeping"
+            targetNamespace="http://www.fpml.org/FpML-5/recordkeeping/nsd-ext"
+            elementFormDefault="qualified">
+
+    <!--Version: 2020-08-06-->
+
+    <xsd:import namespace="http://www.fpml.org/FpML-5/recordkeeping"
+                schemaLocation="fpml-recordkeeping-merged-schema.xsd"/>
+    <xsd:include schemaLocation="nsd-ext-merged-schema.xsd"/>
+    <!--fpml.org/nsd-extensions/nsd-bulk-reporting.xsd-->
+
+
+    <xsd:element name="bulkBinaryOptionsReport"
+                 type="BulkBinaryOptionsReport"
+                 substitutionGroup="fpml:product">
+        <xsd:annotation>
+            <xsd:documentation source="nsdr" xml:lang="ru">Агрегированный отчёт по бинарным опционам</xsd:documentation>
+            <xsd:documentation source="nsdr" xml:lang="en"/>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:element name="repoBulkReport"
+                 type="RepoBulkReport"
+                 substitutionGroup="fpml:product">
+        <xsd:annotation>
+            <xsd:documentation source="nsdr" xml:lang="ru">Отчет по сделкам репо
+            </xsd:documentation>
+            <xsd:documentation source="nsdr" xml:lang="en">Bulk repo report</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:element name="fxSwapBulkReport"
+                 type="FxSwapBulkReport"
+                 substitutionGroup="fpml:product">
+        <xsd:annotation>
+            <xsd:documentation source="nsdr" xml:lang="ru">Отчет по сделкам валютный своп</xsd:documentation>
+            <xsd:documentation source="nsdr" xml:lang="en">FX Swap bulk report</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:element name="fxSingleLegBulkReport"
+                 type="FxSingleLegBulkReport"
+                 substitutionGroup="fpml:product">
+        <xsd:annotation>
+            <xsd:documentation source="nsdr" xml:lang="ru">Отчет по конверсионным сделкам</xsd:documentation>
+            <xsd:documentation source="nsdr" xml:lang="en">FX SingleLeg bulk report</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="BulkBinaryOptionsReport">
+        <xsd:complexContent>
+            <xsd:extension base="fpml:Product">
+                <xsd:sequence>
+                    <xsd:element name="tradesObligationStatus" type="TradeObligationStatus"/>
+                    <xsd:group ref="fpml:BuyerSeller.model">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Покупатель/продавец опциона
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en"/>
+                        </xsd:annotation>
+                    </xsd:group>
+                    <xsd:element ref="fpml:exercise">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Стиль исполнения опциона</xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en"/>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="settlementCurrency" type="fpml:Currency">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Валюта расчётов</xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en"/>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="underlyer" type="BinaryOptionUnderlyer" maxOccurs="unbounded">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Базовый актив</xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en"/>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="t"
+                                 type="BulkBinaryOptionTrade"
+                                 minOccurs="1"
+                                 maxOccurs="unbounded">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Параметры сделки</xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en"/>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="BinaryOptionUnderlyer">
+        <xsd:sequence>
+            <xsd:element name="instrumentId" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation source="nsdr" xml:lang="ru">Идентификтор актива</xsd:documentation>
+                    <xsd:documentation source="nsdr" xml:lang="en"/>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="description" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation source="nsdr" xml:lang="ru">Описание актива</xsd:documentation>
+                    <xsd:documentation source="nsdr" xml:lang="en"/>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:choice>
+                <xsd:annotation>
+                    <xsd:documentation source="nsdr" xml:lang="ru">Выбор единицы измерения актива</xsd:documentation>
+                    <xsd:documentation source="nsdr" xml:lang="en"/>
+                </xsd:annotation>
+                <xsd:element name="unit" type="fpml:QuantityUnit">
+                    <xsd:annotation>
+                        <xsd:documentation source="nsdr" xml:lang="ru">Единица измерения</xsd:documentation>
+                        <xsd:documentation source="nsdr" xml:lang="en"/>
+                    </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="currency" type="fpml:Currency">
+                    <xsd:annotation>
+                        <xsd:documentation source="nsdr" xml:lang="ru">Валюта</xsd:documentation>
+                        <xsd:documentation source="nsdr" xml:lang="en"/>
+                    </xsd:annotation>
+                </xsd:element>
+            </xsd:choice>
+            <xsd:choice minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation source="nsdr" xml:lang="ru"/>
+                    <xsd:documentation source="nsdr" xml:lang="en"/>
+                </xsd:annotation>
+                <xsd:element name="numberOfUnits" type="xsd:int">
+                    <xsd:annotation>
+                        <xsd:documentation source="nsdr" xml:lang="ru">Количество единиц актива в корзине
+                        </xsd:documentation>
+                        <xsd:documentation source="nsdr" xml:lang="en"/>
+                    </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="basketPercentage" type="xsd:decimal">
+                    <xsd:annotation>
+                        <xsd:documentation source="nsdr" xml:lang="ru">Процент актива в корзине</xsd:documentation>
+                        <xsd:documentation source="nsdr" xml:lang="en"/>
+                    </xsd:annotation>
+                </xsd:element>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="BulkBinaryOptionTrade">
+        <xsd:attribute name="o" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Идентификатор сделки, присвоенный участником
+                </xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en"/>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="r" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Идентификатор сделки, присвоенный репозитарием
+                </xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en"/>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="u" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">UTI</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">UTI</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="q" type="xsd:int" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Количество опционов</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en"/>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="f" type="xsd:decimal" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Премия</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">Fee</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="p" type="xsd:decimal" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Начальная цена базового актива</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en"/>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="d" type="xsd:decimal" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Изменение значения цены</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en"/>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="m" type="xsd:decimal" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Фиксированный размер выплаты</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en"/>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+    <xsd:complexType name="RepoBulkReport">
+        <xsd:annotation>
+            <xsd:documentation source="nsdr" xml:lang="ru"/>
+            <xsd:documentation source="nsdr" xml:lang="en"/>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="fpml:Product">
+                <xsd:sequence>
+                    <xsd:element name="tradesObligationStatus" type="TradeObligationStatus">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Статус исполнения обязательств
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Commitment fulfillment status
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="spotLegSettlementDate" type="fpml:IdentifiedDate">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Дата расчетов по первой части
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Spot leg settlement date</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="spotLegDeliveryDate" type="fpml:IdentifiedDate" minOccurs="0">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Дата поставки по первой части
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Spot leg delivery date</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="forwardLegSettlementDate" type="fpml:IdentifiedDate">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Дата расчетов по второй части
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Forward leg settlement date
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="forwardLegDeliveryDate"
+                                 type="fpml:IdentifiedDate"
+                                 minOccurs="0">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Дата поставки по второй части
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Forward leg delivery date</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="repos" maxOccurs="unbounded">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Параметры контракта</xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Parameters</xsd:documentation>
+                        </xsd:annotation>
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="counterparty" type="fpml:Party">
+                                    <xsd:annotation>
+                                        <xsd:documentation source="nsdr" xml:lang="ru">Контрагент</xsd:documentation>
+                                        <xsd:documentation source="nsdr" xml:lang="en">Counterparty</xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
+                                <xsd:element name="repoDetails" maxOccurs="unbounded">
+                                    <xsd:annotation>
+                                        <xsd:documentation source="nsdr" xml:lang="ru">Детали контракта
+                                        </xsd:documentation>
+                                        <xsd:documentation source="nsdr" xml:lang="en">Repo details</xsd:documentation>
+                                    </xsd:annotation>
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="tradeId" type="BulkTradeId">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Идентификаторы
+                                                        сделки
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Trade IDs
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+                                            <xsd:element name="side" type="RepoSide">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Тип стороны
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Party type
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+                                            <xsd:choice>
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru"/>
+                                                    <xsd:documentation source="nsdr" xml:lang="en"/>
+                                                </xsd:annotation>
+                                                <xsd:element name="rate" type="xsd:decimal">
+                                                    <xsd:annotation>
+                                                        <xsd:documentation source="nsdr" xml:lang="ru">Фиксированная
+                                                            ставка репо
+                                                        </xsd:documentation>
+                                                        <xsd:documentation source="nsdr" xml:lang="en">Fixed rate
+                                                        </xsd:documentation>
+                                                    </xsd:annotation>
+                                                </xsd:element>
+                                                <xsd:sequence>
+                                                    <xsd:element name="floatingRate">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Плавающая
+                                                                ставка репо
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Floating
+                                                                rate
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                        <xsd:complexType>
+                                                            <xsd:complexContent>
+                                                                <xsd:extension base="fpml:FloatingRateIndex">
+                                                                    <xsd:attribute name="t" type="xsd:positiveInteger"
+                                                                                   use="required">
+                                                                        <xsd:annotation>
+                                                                            <xsd:documentation source="nsdr"
+                                                                                               xml:lang="ru">
+                                                                                Мультипликатор периода ставки
+                                                                            </xsd:documentation>
+                                                                            <xsd:documentation source="nsdr"
+                                                                                               xml:lang="en">Period
+                                                                                multiplier
+                                                                            </xsd:documentation>
+                                                                        </xsd:annotation>
+                                                                    </xsd:attribute>
+                                                                    <xsd:attribute name="p" type="fpml:PeriodEnum"
+                                                                                   use="required">
+                                                                        <xsd:annotation>
+                                                                            <xsd:documentation source="nsdr"
+                                                                                               xml:lang="ru">Тип
+                                                                                временного периода ставки
+                                                                            </xsd:documentation>
+                                                                            <xsd:documentation source="nsdr"
+                                                                                               xml:lang="en">Period type
+                                                                            </xsd:documentation>
+                                                                        </xsd:annotation>
+                                                                    </xsd:attribute>
+                                                                    <xsd:attribute name="i" type="xsd:decimal"
+                                                                                   use="required">
+                                                                        <xsd:annotation>
+                                                                            <xsd:documentation source="nsdr"
+                                                                                               xml:lang="ru">Начальное
+                                                                                значение плавающей ставки
+                                                                            </xsd:documentation>
+                                                                            <xsd:documentation source="nsdr"
+                                                                                               xml:lang="en">Initial
+                                                                                rate
+                                                                            </xsd:documentation>
+                                                                        </xsd:annotation>
+                                                                    </xsd:attribute>
+                                                                </xsd:extension>
+                                                            </xsd:complexContent>
+                                                        </xsd:complexType>
+                                                    </xsd:element>
+                                                </xsd:sequence>
+                                            </xsd:choice>
+                                            <xsd:element name="spot">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Сумма расчетов по
+                                                        первой части договора
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Spot leg settlement
+                                                        amount
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                                <xsd:complexType>
+                                                    <xsd:attribute name="a" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Сумма
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Amount
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="c" type="Currency" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Валюта
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                            <xsd:element name="forward">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Сумма расчетов по
+                                                        второй части договора
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Forward leg
+                                                        settlement amount
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                                <xsd:complexType>
+                                                    <xsd:attribute name="a" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Сумма
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Amount
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="c" type="Currency" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Валюта
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                            <xsd:choice maxOccurs="unbounded">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Выбор обеспечения
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">A choice of underlyer
+                                                        asset
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                                <xsd:element name="equity">
+                                                    <xsd:annotation>
+                                                        <xsd:documentation source="nsdr" xml:lang="ru">Акция
+                                                        </xsd:documentation>
+                                                        <xsd:documentation source="nsdr" xml:lang="en">Equity
+                                                        </xsd:documentation>
+                                                    </xsd:annotation>
+                                                    <xsd:complexType>
+                                                        <xsd:attribute name="id" type="xsd:string" use="required">
+                                                            <xsd:annotation>
+                                                                <xsd:documentation source="nsdr" xml:lang="ru">Код
+                                                                    базисного актива
+                                                                </xsd:documentation>
+                                                                <xsd:documentation source="nsdr" xml:lang="en">Asset
+                                                                    identifier
+                                                                </xsd:documentation>
+                                                            </xsd:annotation>
+                                                        </xsd:attribute>
+                                                        <xsd:attribute name="n" type="xsd:integer" use="required">
+                                                            <xsd:annotation>
+                                                                <xsd:documentation source="nsdr" xml:lang="ru">
+                                                                    Количество ценных бумаг
+                                                                </xsd:documentation>
+                                                                <xsd:documentation source="nsdr" xml:lang="en">Number of
+                                                                    units
+                                                                </xsd:documentation>
+                                                            </xsd:annotation>
+                                                        </xsd:attribute>
+                                                        <xsd:attribute name="p" type="fpml:PositiveDecimal"
+                                                                       use="required">
+                                                            <xsd:annotation>
+                                                                <xsd:documentation source="nsdr" xml:lang="ru">Цена
+                                                                    единицы актива
+                                                                </xsd:documentation>
+                                                                <xsd:documentation source="nsdr" xml:lang="en">Unit
+                                                                    price
+                                                                </xsd:documentation>
+                                                            </xsd:annotation>
+                                                        </xsd:attribute>
+                                                        <xsd:attribute name="c" type="Currency" use="required">
+                                                            <xsd:annotation>
+                                                                <xsd:documentation source="nsdr" xml:lang="ru">Валюта
+                                                                </xsd:documentation>
+                                                                <xsd:documentation source="nsdr" xml:lang="en">
+                                                                    Currency
+                                                                </xsd:documentation>
+                                                            </xsd:annotation>
+                                                        </xsd:attribute>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                                <xsd:element name="bond">
+                                                    <xsd:complexType>
+                                                        <xsd:attribute name="id" type="xsd:string">
+                                                            <xsd:annotation>
+                                                                <xsd:documentation source="nsdr" xml:lang="ru">Код
+                                                                    базисного актива
+                                                                </xsd:documentation>
+                                                                <xsd:documentation source="nsdr" xml:lang="en">Asset
+                                                                    identifier
+                                                                </xsd:documentation>
+                                                            </xsd:annotation>
+                                                        </xsd:attribute>
+                                                        <xsd:attribute name="n" type="fpml:PositiveDecimal"
+                                                                       use="required">
+                                                            <xsd:annotation>
+                                                                <xsd:documentation source="nsdr" xml:lang="ru">Номинал
+                                                                </xsd:documentation>
+                                                                <xsd:documentation source="nsdr" xml:lang="en">Nominal
+                                                                </xsd:documentation>
+                                                            </xsd:annotation>
+                                                        </xsd:attribute>
+                                                        <xsd:attribute name="c" type="Currency" use="required">
+                                                            <xsd:annotation>
+                                                                <xsd:documentation source="nsdr" xml:lang="ru">Валюта
+                                                                </xsd:documentation>
+                                                                <xsd:documentation source="nsdr" xml:lang="en">
+                                                                    Currency
+                                                                </xsd:documentation>
+                                                            </xsd:annotation>
+                                                        </xsd:attribute>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </xsd:choice>
+                                            <xsd:element name="client" type="Client" minOccurs="0"
+                                                         maxOccurs="unbounded">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Клиент
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Client
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:simpleType name="RepoSide">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Buyer">
+                <xsd:annotation>
+                    <xsd:documentation source="nsdr" xml:lang="ru">Покупатель</xsd:documentation>
+                    <xsd:documentation source="nsdr" xml:lang="en">Buyer</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="Seller">
+                <xsd:annotation>
+                    <xsd:documentation source="nsdr" xml:lang="ru">Продавец</xsd:documentation>
+                    <xsd:documentation source="nsdr" xml:lang="en">Seller</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="BulkTradeId">
+        <xsd:attribute name="r" use="optional" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Идентификационный код договора</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">Repository tradeId</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="p" use="required" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Внутренний номер договора</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">Party tradeId</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="u" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">UTI код договора</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">UTI</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="pid" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Код классификации ПФИ</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">Derivatives classification code</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+    <xsd:complexType name="FxSwapBulkReport">
+        <xsd:complexContent>
+            <xsd:extension base="fpml:Product">
+                <xsd:sequence>
+                    <xsd:element name="tradesObligationStatus" type="TradeObligationStatus">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Статус исполнения обязательств
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Commitment fulfillment status
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="nearLegSettlementDate" type="fpml:IdentifiedDate">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Дата расчетов по первой части
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Near leg settlement date</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="farLegSettlementDate" type="fpml:IdentifiedDate">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Дата расчетов по второй части
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Far leg settlement date</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element maxOccurs="unbounded" name="swaps">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Сделки</xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Swaps</xsd:documentation>
+                        </xsd:annotation>
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="counterparty" type="fpml:Party">
+                                    <xsd:annotation>
+                                        <xsd:documentation source="nsdr" xml:lang="ru">Контрагент</xsd:documentation>
+                                        <xsd:documentation source="nsdr" xml:lang="en">Counterparty</xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
+                                <xsd:element maxOccurs="unbounded" name="swapDetails">
+                                    <xsd:annotation>
+                                        <xsd:documentation source="nsdr" xml:lang="ru">Детали контракта
+                                        </xsd:documentation>
+                                        <xsd:documentation source="nsdr" xml:lang="en">Swap details</xsd:documentation>
+                                    </xsd:annotation>
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="tradeId" type="BulkTradeId">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Идентификаторы
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Trade IDs
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+                                            <xsd:element name="side" type="SwapSide">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Тип стороны
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Party type
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+                                            <xsd:element name="currencies">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Валюты
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Currencies
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                                <xsd:complexType>
+                                                    <xsd:attribute name="c1" type="Currency" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Валюта 1
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 1
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="c2" type="Currency" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Валюта 2
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 2
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="d" type="Currency" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Торгуемая
+                                                                валюта (базовый актив)
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Dealt
+                                                                Currency (Underlying Currency)
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                            <xsd:element name="nearLeg">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Первоначальный платеж
+                                                        по валютному свопу
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Near FX Swap Leg
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                                <xsd:complexType>
+                                                    <xsd:attribute name="c1" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Сумма валюты
+                                                                1
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 1
+                                                                amount
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="c2" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Сумма валюты
+                                                                2
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 2
+                                                                amount
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="b" type="fpml:QuoteBasisEnum" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Базис
+                                                                котировки
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Quote basis
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="r" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Ставка
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Rate
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                            <xsd:element name="farLeg">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Окончательный платеж
+                                                        по валютному свопу
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Far FX Swap Leg
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                                <xsd:complexType>
+                                                    <xsd:attribute name="c1" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Сумма валюты
+                                                                1
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 1
+                                                                amount
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="c2" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Сумма валюты
+                                                                2
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 2
+                                                                amount
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="b" type="fpml:QuoteBasisEnum" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Базис
+                                                                котировки
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Quote basis
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="r" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Ставка
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Rate
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                            <xsd:element name="client" type="Client" minOccurs="0"
+                                                         maxOccurs="unbounded">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Клиент
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Client
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:simpleType name="SwapSide">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Payer">
+                <xsd:annotation>
+                    <xsd:documentation source="nsdr" xml:lang="ru">Плательщик</xsd:documentation>
+                    <xsd:documentation source="nsdr" xml:lang="en">Payer</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="Receiver">
+                <xsd:annotation>
+                    <xsd:documentation source="nsdr" xml:lang="ru">Получатель</xsd:documentation>
+                    <xsd:documentation source="nsdr" xml:lang="en">Receiver</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="FxSingleLegBulkReport">
+        <xsd:complexContent>
+            <xsd:extension base="fpml:Product">
+                <xsd:sequence>
+                    <xsd:element name="tradesObligationStatus" type="TradeObligationStatus">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Статус исполнения обязательств
+                            </xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Commitment fulfillment status
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="settlementDate" type="fpml:IdentifiedDate">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Дата расчетов</xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Settlement date</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element maxOccurs="unbounded" name="singleLegs">
+                        <xsd:annotation>
+                            <xsd:documentation source="nsdr" xml:lang="ru">Сделки</xsd:documentation>
+                            <xsd:documentation source="nsdr" xml:lang="en">Swaps</xsd:documentation>
+                        </xsd:annotation>
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="counterparty" type="fpml:Party">
+                                    <xsd:annotation>
+                                        <xsd:documentation source="nsdr" xml:lang="ru">Контрагент</xsd:documentation>
+                                        <xsd:documentation source="nsdr" xml:lang="en">Counterparty</xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
+                                <xsd:element maxOccurs="unbounded" name="singleLegDetails">
+                                    <xsd:annotation>
+                                        <xsd:documentation source="nsdr" xml:lang="ru">Детали контракта
+                                        </xsd:documentation>
+                                        <xsd:documentation source="nsdr" xml:lang="en">Swap details</xsd:documentation>
+                                    </xsd:annotation>
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="tradeId" type="BulkTradeId">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Идентификаторы
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Trade IDs
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+                                            <xsd:element name="side" type="SwapSide">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Тип стороны
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Party type
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+                                            <xsd:element name="currencies">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Валюты
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Currencies
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                                <xsd:complexType>
+                                                    <xsd:attribute name="c1" type="Currency" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Валюта 1
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 1
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="c2" type="Currency" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Валюта 2
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 2
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="d" type="Currency" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Торгуемая
+                                                                валюта (базовый актив)
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Dealt
+                                                                Currency (Underlying Currency)
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                            <xsd:element name="singleLeg">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Платеж по сделке
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">SingleLeg
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                                <xsd:complexType>
+                                                    <xsd:attribute name="c1" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Сумма валюты
+                                                                1
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 1
+                                                                amount
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="c2" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Сумма валюты
+                                                                2
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Currency 2
+                                                                amount
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="b" type="fpml:QuoteBasisEnum" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Базис
+                                                                котировки
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Quote basis
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                    <xsd:attribute name="r" type="fpml:PositiveDecimal" use="required">
+                                                        <xsd:annotation>
+                                                            <xsd:documentation source="nsdr" xml:lang="ru">Ставка
+                                                            </xsd:documentation>
+                                                            <xsd:documentation source="nsdr" xml:lang="en">Rate
+                                                            </xsd:documentation>
+                                                        </xsd:annotation>
+                                                    </xsd:attribute>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                            <xsd:element name="client" type="Client" minOccurs="0"
+                                                         maxOccurs="unbounded">
+                                                <xsd:annotation>
+                                                    <xsd:documentation source="nsdr" xml:lang="ru">Клиент
+                                                    </xsd:documentation>
+                                                    <xsd:documentation source="nsdr" xml:lang="en">Client
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="Client">
+        <xsd:attribute name="i" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Идентификатор клиента</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">Client ID</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:minLength value="1"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="t" type="ClientType" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Тип клиента</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">Client type</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="n" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Наименование клиента</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">Client name</xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:minLength value="1"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="c" type="Country" use="required">
+            <xsd:annotation>
+                <xsd:documentation source="nsdr" xml:lang="ru">Код страны клиента</xsd:documentation>
+                <xsd:documentation source="nsdr" xml:lang="en">Country code</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+</xsd:schema>
