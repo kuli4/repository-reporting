@@ -1,9 +1,6 @@
 package pro.kuli4.repository.maprocessor.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.kuli4.repository.maprocessor.dto.beans.MasterAgreementOuterRequestDto;
 import pro.kuli4.repository.maprocessor.dto.mappers.MasterAgreementOuterRequestMapper;
@@ -12,6 +9,7 @@ import pro.kuli4.repository.maprocessor.repositories.MasterAgreementRepository;
 import java.util.Collection;
 
 @Slf4j
+@CrossOrigin
 @RequestMapping("/ma/")
 @RestController
 public class MasterAgreementOuterRequestController {
@@ -27,13 +25,8 @@ public class MasterAgreementOuterRequestController {
     }
 
     @GetMapping(value = "/")
-    public ResponseEntity<Collection<MasterAgreementOuterRequestDto>> getAllMasterAgreements() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
-        return new ResponseEntity<>(
-                masterAgreementOuterRequestMapper.mapAll(masterAgreementRepository.findAll()),
-                headers,
-                HttpStatus.OK);
+    public Collection<MasterAgreementOuterRequestDto> getAllMasterAgreements() {
+        return masterAgreementOuterRequestMapper.mapAll(masterAgreementRepository.findAll());
     }
 
     @GetMapping(value = "/{id}/")

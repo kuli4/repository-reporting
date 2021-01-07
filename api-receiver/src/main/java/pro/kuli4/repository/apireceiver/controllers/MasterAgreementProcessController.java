@@ -1,11 +1,14 @@
 package pro.kuli4.repository.apireceiver.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.kuli4.repository.apireceiver.services.MasterAgreementProcessService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/ma/")
 @Slf4j
 public class MasterAgreementProcessController {
